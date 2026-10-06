@@ -13,6 +13,7 @@
 - [ ] Kategorie dla celów to: Edukacja, Hobby, Sport, Zdrowie lub Inne
 - [ ] Po dodaniu cel wyświetla się ze statusem "W trakcie"
 - [ ] Po dodaniu celu liczbowego wyświetla się on z procentem ukończenia (0%)
+- [ ] Każdy cel ma swój numer jako unikalny id dodawany po utworzeniu
 ***
 
 
@@ -31,6 +32,8 @@
 - [ ] WP musi dotyczyć istniejącego celu
 - [ ] WP przekraczający WD jest przyjmowany (np. 490 + 30 = 520 z 500)
 - [ ] Do zakończonego celu nie można dodać WP
+- [ ] Każdy WP ma swój numer jako unikalny id dodawany po utworzeniu
+
 ***
 
 
@@ -83,13 +86,11 @@
 **aby** kontynuować osiąganie pierwotnego celu
 
 #### Kryteria akceptacji:
-- [ ] Zmiana wartości docelowej dotyczy tylko typów liczbowych
-- [ ] Nowa wartość docelowa musi być inna od poprzedniej oraz większa od 0
+- [ ] Zmiana wartości docelowej dotyczy tylko ukończonych celów liczbowych
+- [ ] Nowa wartość docelowa musi być większa od sumy WP
+- [ ] Po zmianie cel ma status "W trakcie"
 - [ ] Po zmianie procent ukończenia liczy się od nowej WD
-- [ ] Jeśli suma WP jest mniejsza od WD, status zmienia się na "W trakcie"
-- [ ] Jeśli suma WP jest większa lub równa WD, status zmienia się na "Zakończony"
 ***
-
 
 ## 7. Usunięcie wpisów
 
