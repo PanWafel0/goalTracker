@@ -24,4 +24,13 @@ public class GoalService {
         return goals;
     }
 
+    public Goal findGoalById(int id){
+        for(Goal goal : goals){
+            if(goal.getId() == id){
+                return goal;
+            }
+        }
+        return null;
+    }
+
 }
