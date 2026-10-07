@@ -21,13 +21,26 @@ public class Goal {
         this.isDeleted = false;
         this.entries = new ArrayList<>();
     }
+
     public List<ProgressEntry> getEntries(){ return entries;}
     public int getId() {return id;}
     public String getName(){return name;}
-
     public GoalType getType(){return type;}
     public double getTargetValue(){return targetValue;}
     public Category getCategory(){return category;}
-    public boolean IsDeleted(){return isDeleted;}
+    public boolean isDeleted(){return isDeleted;}
+
     public void setDeleted (boolean isDeleted){this.isDeleted = isDeleted;}
+
+    public void addEntry(ProgressEntry entry){entries.add(entry);}
+    public void removeEntryById(int entryId){
+        int i =0;
+        while(i< entries.size()){
+            if(entries.get(i).getId() == entryId){
+                entries.remove(i);
+                return;
+            }
+            i++;
+        }
+    }
 }

@@ -21,5 +21,11 @@ public class ProgressEntry {
     public LocalDate getDate(){
         return date;
     }
+    public void setValue(double newValue){
+        value = newValue;
+    }
+    public void setDate(LocalDate newDate){
+        date = newDate;
+    }
 }
 
