@@ -3,8 +3,7 @@ package com.goaltracker.goaltracker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GoalServiceTest {
 
@@ -13,32 +12,64 @@ public class GoalServiceTest {
     @BeforeEach
     void setUp() {
         service = new GoalService();
-        service.addGoal(new Goal(1, "Bieg", null, 5, null));
-        service.addGoal(new Goal(2, "Czytanie", null, 20, null));
-        service.addGoal(new Goal(3, "Woda", null, 2.5, null));
+
+        addGoal("Bieg", GoalType.NUMERIC, 5, Category.SPORT, true);
+        addGoal("Czytanie", GoalType.NUMERIC, 20, Category.EDUCATION, true);
+        addGoal("Woda", GoalType.NUMERIC, 2.5, Category.HEALTH, true);
     }
 
     @Test
-    void addGoalAddsThreeGoals() {
+    void shouldAddThreeGoals() {
         assertEquals(3, service.getGoals().size());
     }
 
     @Test
-    void addGoalIncreasesListSize() {
-        service.addGoal(new Goal(4, "Spacer", null, 10, null));
+    void shouldAddValidGoal() {
+        addGoal("Spacer", GoalType.NUMERIC, 10, Category.SPORT, true);
 
         assertEquals(4, service.getGoals().size());
     }
 
     @Test
-    void findGoalByIdReturnsCorrectGoal() {
-        Goal found = service.findGoalById(2);
-
-        assertEquals("Czytanie", found.getName());
+    void shouldFindGoalById() {
+        assertEquals("Czytanie", service.findGoalById(2).getName());
     }
 
     @Test
-    void findGoalByIdReturnsNullWhenMissing() {
+    void shouldReturnNullForMissingGoal() {
         assertNull(service.findGoalById(99));
+    }
+
+    @Test
+    void shouldNotAddGoalWithBlankName() {
+        addGoal("   ", GoalType.NUMERIC, 10, Category.SPORT, false);
+
+        assertEquals(3, service.getGoals().size());
+    }
+
+    @Test
+    void shouldNotAddNumericGoalWithZeroTargetValue() {
+        addGoal("Nauka", GoalType.NUMERIC, 0, Category.EDUCATION, false);
+
+        assertEquals(3, service.getGoals().size());
+    }
+
+    @Test
+    void shouldAddHabitGoalWithZeroTargetValue() {
+        addGoal("Codzienne czytanie", GoalType.HABIT, 0, Category.EDUCATION, true);
+
+        assertEquals(4, service.getGoals().size());
+    }
+
+    private void addGoal(
+            String name,
+            GoalType type,
+            double targetValue,
+            Category category,
+            boolean expected
+    ) {
+        boolean added = service.addGoal(new Goal(name, type, targetValue, category));
+
+        assertEquals(expected, added);
     }
 }

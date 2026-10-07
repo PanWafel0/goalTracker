@@ -7,8 +7,7 @@ public class ProgressEntry {
     private double value;
     private LocalDate date;
 
-    public ProgressEntry(int id, double value, LocalDate date){
-        this.id = id;
+    public ProgressEntry( double value, LocalDate date){
         this.value = value;
         this.date = date;
     }
@@ -26,6 +25,9 @@ public class ProgressEntry {
     }
     public void setDate(LocalDate newDate){
         date = newDate;
+    }
+    public void setId(int id) {
+        this.id =id;
     }
 }
 
