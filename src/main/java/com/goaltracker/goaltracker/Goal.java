@@ -1,5 +1,6 @@
 package com.goaltracker.goaltracker;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,28 +53,39 @@ public class Goal {
     public boolean isDeleted(){return isDeleted;}
 
     //zarządzanie wpisami postępu
-    public void addEntry(ProgressEntry entry){
-        if(status=="W trakcie") {
+    public boolean addEntry(ProgressEntry entry){
+        if(entry.getValue()<=0){
+            System.out.println("Nie można dodac wpisu z wartością nie wiekszą niż 0");
+            return false;
+        }
+        if(entry.getDate().isAfter(LocalDate.now())){
+            System.out.println("data nie może wskazywać przyszłosci");
+            return false;
+        }
+        if("W trakcie".equals(status)){
             entries.add(entry);
             entry.setId(currentEntryId++);
             if (type == GoalType.NUMERIC && getCompletionPercentage() == 100.0) {
                 status = "Zakończony";
             }
+            return true;
         }
         else{
             System.out.println("status: "+status);
             System.out.println("nie można dodać wpisu");
+            return false;
         }
     }
-    public void removeEntryById(int entryId){
+    public boolean removeEntryById(int entryId){
         int i =0;
         while(i< entries.size()){
             if(entries.get(i).getId() == entryId){
                 entries.remove(i);
-                return;
+                return true;
             }
             i++;
         }
+        return false;
     }
 
     public void setId(int id) {

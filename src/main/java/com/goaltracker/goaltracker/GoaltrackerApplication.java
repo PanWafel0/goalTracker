@@ -23,10 +23,9 @@ public class GoaltrackerApplication {
 		goal.addEntry(new ProgressEntry(250, LocalDate.now()));
 		double afterFirstEntry = goal.getCompletionPercentage();
 		System.out.println(goal.getStatus());
-		goal.addEntry(new ProgressEntry(270, LocalDate.now()));
+		goal.addEntry(new ProgressEntry(270, LocalDate.now().plusDays(1)));
 		double afterSecondEntry = goal.getCompletionPercentage();
-		goal.addEntry(new ProgressEntry(270, LocalDate.now()));
-		double afterThirdEntry = goal.getCompletionPercentage();
+
 		System.out.println("""
                 Cel: %s
                 Wartość docelowa: %.0f
