@@ -17,6 +17,7 @@ public class ConsoleMenu {
     }
 
     private int choseOptions(){
+        showGoals();
         System.out.println("1: Dodaj cel");
         System.out.println("2: Wybierz cel z listy");
         System.out.println("3: Pokaż kosz");
@@ -45,7 +46,8 @@ public class ConsoleMenu {
     }
     private void manageGoal(int id){
         Goal goal = service.findGoalById(id);
-        if(goal == null){
+
+        if(goal == null || goal.isDeleted()){
             System.out.println("nie ma takiego id");
             return;
         }
@@ -58,7 +60,7 @@ public class ConsoleMenu {
                 deleteEntry(goal.getId());
                 break;
             case 3:
-                deleteGoalPermanently(goal.getId());
+                deleteGoalToTrash(goal.getId());
                 break;
             case 4:
                 if(!goal.isFinished()){
@@ -103,9 +105,9 @@ public class ConsoleMenu {
             System.out.println("Wystąpił błąd");
         }
     }
-    private void deleteGoalPermanently(int goalId){
-        if(service.deleteGoalPermanentlyById(goalId)){
-            System.out.println("Pomyślnie usunięto cel");
+    private void deleteGoalToTrash(int goalId){
+        if(service.moveGoalToTrashById(goalId)){
+            System.out.println("Pomyślnie przeniesiono do kosza cel");
         }
         else{
             System.out.println("Wystąpił błąd podczas usuwania celu");
@@ -126,7 +128,7 @@ public class ConsoleMenu {
 
         while (running) {
             int choice = choseOptions();
-            showGoals();
+
             switch (choice) {
                 case 1:
                     addGoal();

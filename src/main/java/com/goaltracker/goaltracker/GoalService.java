@@ -51,11 +51,13 @@ public class GoalService {
     }
 
     //usuwanie i przywracanie celów
-    public void moveGoalToTrashById(int id){
+    public boolean moveGoalToTrashById(int id){
         Goal goal = findGoalById(id);
         if(goal != null){
             goal.setDeleted(true);
+            return true;
         }
+        return false;
     }
     public boolean deleteGoalPermanentlyById(int goalId){
         Goal goal = findGoalById(goalId);
@@ -65,11 +67,13 @@ public class GoalService {
         }
         return false;
     }
-    public void restoreGoalFromTrashById(int id){
+    public boolean restoreGoalFromTrashById(int id){
         Goal goal = findGoalById(id);
         if(goal != null){
             goal.setDeleted(false);
+            return true;
         }
+        return false;
     }
 
     //pokazywanie listy oraz listy kosza
