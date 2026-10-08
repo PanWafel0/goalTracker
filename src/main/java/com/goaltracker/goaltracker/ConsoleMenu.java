@@ -5,8 +5,8 @@ import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class ConsoleMenu {
-    private GoalService service;
-    private Scanner scanner = new Scanner(System.in);
+    private final GoalService service;
+    private final Scanner scanner = new Scanner(System.in);
 
     public ConsoleMenu(GoalService service) {
         this.service = service;
@@ -65,12 +65,11 @@ public class ConsoleMenu {
             case 4:
                 if(!goal.isFinished()){
                     changeTargetValue();
-                    break;
                 }
                 else{
                     System.out.println("Nie zmienić wartości docelowej celu, który nie jest jeszcze ukończony");
-                    break;
                 }
+                break;
             default:
                 break;
         }

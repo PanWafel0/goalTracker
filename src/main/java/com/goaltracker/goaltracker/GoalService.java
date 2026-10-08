@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GoalService {
-    private List<Goal> goals;
+    private final List<Goal> goals;
     private int currentId=1;
 
     public GoalService(){
