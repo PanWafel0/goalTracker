@@ -51,7 +51,7 @@ public class GoalService {
     }
     public boolean deleteGoalPermanentlyById(int id){
         Goal goal = findGoalById(id);
-        if(goal != null){
+        if(goal != null && goal.isDeleted()){
             goals.remove(goal);
             return true;
         }
@@ -66,16 +66,17 @@ public class GoalService {
 
     //pokazywanie listy oraz listy kosza
     private void showAllGoals(Goal goal){
-            System.out.print("[" + goal.getId() + " | ");
+            System.out.print("[" + goal.getId() + "][");
             System.out.print(goal.getName() + " | ");
             System.out.print(goal.getTargetValue() + " | ");
-            System.out.print(goal.getCompletionPercentage() + " | ");
+            System.out.print(goal.getCompletionPercentage() + "% | ");
+            System.out.print(goal.getGoalUnit() + " | ");
             System.out.print(goal.getStatus() + " | ");
             System.out.print(goal.getCategory() + " | ");
             System.out.print(goal.getType() + "]");
             if (!goal.getEntries().isEmpty()) {
                 ProgressEntry lastEntry = goal.getLastEntry();
-                System.out.print(" Ostatni wpis: [ " + lastEntry.getId() + " | " + lastEntry.getValue() + " ]");
+                System.out.print(" Ostatni wpis: [" + lastEntry.getValue() + "]");
             } else {
                 System.out.print(" Brak wpisów");
             }
@@ -91,7 +92,7 @@ public class GoalService {
         }
     }
     public void showGoalsInTrash(){
-        System.out.println("Lista celów: ");
+        System.out.println("Lista usuniętych celów: ");
         for(Goal goal : goals){
             if(goal.isDeleted()) {
                 showAllGoals(goal);

@@ -8,6 +8,7 @@ public class Goal {
     private int id;
     private String name;
     private GoalType type;
+    private String goalUnit;
     private double targetValue;
     private Category category;
     private String status;
@@ -16,9 +17,10 @@ public class Goal {
     private int currentEntryId=1;
 
 
-    public Goal(String name, GoalType type, double targetValue, Category category){
+    public Goal(String name, GoalType type,String goalUnit, double targetValue, Category category){
         this.name = name;
         this.type = type;
+        this.goalUnit = goalUnit;
         this.targetValue = targetValue;
         this.category = category;
         this.isDeleted = false;
@@ -30,6 +32,7 @@ public class Goal {
     public int getId() {return id;}
     public String getName(){return name;}
     public GoalType getType(){return type;}
+    public String getGoalUnit(){return goalUnit;}
     public double getTargetValue(){return targetValue;}
     public Category getCategory(){return category;}
     public String getStatus(){return status;}
