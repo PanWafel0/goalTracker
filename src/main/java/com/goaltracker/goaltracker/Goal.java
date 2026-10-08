@@ -92,7 +92,7 @@ public class Goal {
             return false;
         }
     }
-    public boolean removeEntryById(int entryId){
+    public boolean deleteEntryById(int entryId){
         int i =0;
         while(i< entries.size()){
             if(entries.get(i).getId() == entryId){
@@ -107,5 +107,8 @@ public class Goal {
 
     public void setId(int id) {
         this.id =id;
+    }
+    public boolean isFinished(){
+        return getStatus().equals("Zakończony");
     }
 }

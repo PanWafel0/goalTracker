@@ -33,6 +33,7 @@ public class GoalService {
         }
         return null;
     }
+    //zarzadzanie entry
     public boolean addEntryToGoal(int goalId, ProgressEntry entry){
         Goal goal = findGoalById(goalId);
 
@@ -40,6 +41,13 @@ public class GoalService {
             return false;
         }
         return goal.addEntry(entry);
+    }
+    public boolean deleteEntryFromGoal(int entryId, int goalId){
+        Goal goal = findGoalById(goalId);
+        if(goal == null){
+            return false;
+        }
+        return goal.deleteEntryById(entryId);
     }
 
     //usuwanie i przywracanie celów
@@ -49,8 +57,8 @@ public class GoalService {
             goal.setDeleted(true);
         }
     }
-    public boolean deleteGoalPermanentlyById(int id){
-        Goal goal = findGoalById(id);
+    public boolean deleteGoalPermanentlyById(int goalId){
+        Goal goal = findGoalById(goalId);
         if(goal != null && goal.isDeleted()){
             goals.remove(goal);
             return true;
@@ -138,5 +146,6 @@ public class GoalService {
             }
         }
     }
+
 
 }
