@@ -7,41 +7,27 @@ import java.time.LocalDate;
 @SpringBootApplication
 public class GoaltrackerApplication {
 
+		public static void main(String[] args) {
+			GoalService service = new GoalService();
 
+			Goal learning = new Goal("Nauka Javy", GoalType.NUMERIC, 500, Category.EDUCATION);
+			Goal running = new Goal("Bieganie", GoalType.HABIT, 0, Category.SPORT);
+			Goal reading = new Goal("Czytanie", GoalType.HABIT, 0, Category.OTHER);
 
-	public static void main(String[] args) {
-		GoalService service = new GoalService();
+			service.addGoal(learning);
+			service.addGoal(running);
+			service.addGoal(reading);
 
-		service.addGoal(
-				new Goal("Bieganie", GoalType.NUMERIC, 500, Category.SPORT)
-		);
+			ProgressEntry firstEntry = new ProgressEntry(250, LocalDate.now());
+			ProgressEntry secondEntry = new ProgressEntry(150, LocalDate.now());
 
-		Goal goal = service.findGoalById(1);
+			service.addEntryToGoal(learning.getId(), firstEntry);
+			service.addEntryToGoal(learning.getId(), secondEntry);
 
-		double startPercentage = goal.getCompletionPercentage();
+			service.showList();
 
-		goal.addEntry(new ProgressEntry(250, LocalDate.now()));
-		double afterFirstEntry = goal.getCompletionPercentage();
-		System.out.println(goal.getStatus());
-		goal.addEntry(new ProgressEntry(270, LocalDate.now().plusDays(1)));
-		double afterSecondEntry = goal.getCompletionPercentage();
-
-		System.out.println("""
-                Cel: %s
-                Wartość docelowa: %.0f
-                Procent na początku: %.1f%%
-                Po wpisie 250: %.1f%%
-                Po wpisie 270: %.1f%%
-                """.formatted(
-				goal.getName(),
-				goal.getTargetValue(),
-				startPercentage,
-				afterFirstEntry,
-				afterSecondEntry
-		));
-		System.out.println(goal.getStatus());
 	}
-	}
+}
 
 
 

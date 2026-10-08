@@ -33,13 +33,18 @@ public class Goal {
     public double getTargetValue(){return targetValue;}
     public Category getCategory(){return category;}
     public String getStatus(){return status;}
+    public int  getCurrentEntryId(){return currentEntryId;}
+    public ProgressEntry getLastEntry(){
+        return entries.getLast();
+    }
+
     public double getCompletionPercentage(){
         if(type==GoalType.NUMERIC) {
             double total = 0;
             for (ProgressEntry entry : entries) {
                 total += entry.getValue();
             }
-            double percentage = total/targetValue*100;
+            double percentage = Math.floor(total/targetValue*100);
             if(percentage>100){
                 return 100.0;
             }
@@ -49,6 +54,16 @@ public class Goal {
     }
     //settery
     public void setDeleted (boolean isDeleted){this.isDeleted = isDeleted;}
+
+    private void checkStatus(){
+        if(getCompletionPercentage()<100){
+            status = "W trakcie";
+        }
+        else{
+            status = "Zakończony";
+        }
+    }
+
 
     public boolean isDeleted(){return isDeleted;}
 
@@ -65,9 +80,7 @@ public class Goal {
         if("W trakcie".equals(status)){
             entries.add(entry);
             entry.setId(currentEntryId++);
-            if (type == GoalType.NUMERIC && getCompletionPercentage() == 100.0) {
-                status = "Zakończony";
-            }
+            checkStatus();
             return true;
         }
         else{
@@ -81,6 +94,7 @@ public class Goal {
         while(i< entries.size()){
             if(entries.get(i).getId() == entryId){
                 entries.remove(i);
+                checkStatus();
                 return true;
             }
             i++;

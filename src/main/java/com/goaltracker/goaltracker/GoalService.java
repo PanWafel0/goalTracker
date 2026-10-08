@@ -11,12 +11,8 @@ public class GoalService {
         this.goals = new ArrayList<>();
     }
 
-    public void showList(){
-        for(Goal goal : goals){
-            if(!goal.isDeleted()){
-                System.out.println(goal.getName());
-            }
-        }
+    public List<Goal> getGoals() {
+        return goals;
     }
 
     public boolean addGoal(Goal goal){
@@ -28,9 +24,6 @@ public class GoalService {
         return false;
     }
 
-    public List<Goal> getGoals() {
-        return goals;
-    }
 
     public Goal findGoalById(int id){
         for(Goal goal : goals){
@@ -40,20 +33,30 @@ public class GoalService {
         }
         return null;
     }
+    public boolean addEntryToGoal(int goalId, ProgressEntry entry){
+        Goal goal = findGoalById(goalId);
+
+        if(goal == null){
+            return false;
+        }
+        return goal.addEntry(entry);
+    }
+
+    //usuwanie i przywracanie celów
     public void moveGoalToTrashById(int id){
         Goal goal = findGoalById(id);
         if(goal != null){
             goal.setDeleted(true);
         }
     }
-
-    public void deleteGoalPermanentlyById(int id){
+    public boolean deleteGoalPermanentlyById(int id){
         Goal goal = findGoalById(id);
         if(goal != null){
             goals.remove(goal);
+            return true;
         }
+        return false;
     }
-
     public void restoreGoalFromTrashById(int id){
         Goal goal = findGoalById(id);
         if(goal != null){
@@ -61,10 +64,37 @@ public class GoalService {
         }
     }
 
-    public void showGoalsInTrash(){
+    //pokazywanie listy oraz listy kosza
+    private void showAllGoals(Goal goal){
+            System.out.print("[" + goal.getId() + " | ");
+            System.out.print(goal.getName() + " | ");
+            System.out.print(goal.getTargetValue() + " | ");
+            System.out.print(goal.getCompletionPercentage() + " | ");
+            System.out.print(goal.getStatus() + " | ");
+            System.out.print(goal.getCategory() + " | ");
+            System.out.print(goal.getType() + "]");
+            if (!goal.getEntries().isEmpty()) {
+                ProgressEntry lastEntry = goal.getLastEntry();
+                System.out.print(" Ostatni wpis: [ " + lastEntry.getId() + " | " + lastEntry.getValue() + " ]");
+            } else {
+                System.out.print(" Brak wpisów");
+            }
+
+            System.out.println();
+    }
+    public void showList(){
+        System.out.println("Lista celów: ");
         for(Goal goal : goals){
-            if(goal.isDeleted()){
-                System.out.println(goal.getName());
+            if(!goal.isDeleted()) {
+                showAllGoals(goal);
+            }
+        }
+    }
+    public void showGoalsInTrash(){
+        System.out.println("Lista celów: ");
+        for(Goal goal : goals){
+            if(goal.isDeleted()) {
+                showAllGoals(goal);
             }
         }
     }
