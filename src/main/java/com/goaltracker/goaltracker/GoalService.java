@@ -87,6 +87,7 @@ public class GoalService {
             System.out.print(goal.getGoalUnit() + " | ");
             System.out.print(goal.getStatus() + " | ");
         }
+        System.out.println("Streak["+goal.getStreak()+"] | ");
         System.out.print(goal.getCategory() + " | ");
         System.out.print(goal.getType() + "]");
         if (!goal.getEntries().isEmpty()) {

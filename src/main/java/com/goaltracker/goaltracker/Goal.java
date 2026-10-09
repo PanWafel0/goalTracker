@@ -62,6 +62,34 @@ public class Goal {
         }
         return 0.0;
     }
+
+    public int getStreak(){
+        LocalDate todayDate = LocalDate.now();
+        LocalDate yesterdayDate = todayDate.minusDays(1);
+        int streak = 0;
+        LocalDate currentDay;
+        if(hasEntryOnDate(todayDate)){
+            currentDay = todayDate;
+        } else if (hasEntryOnDate(yesterdayDate)) {
+            currentDay = yesterdayDate;
+        }
+        else return 0;
+        while(hasEntryOnDate(currentDay)){
+            streak++;
+            currentDay = currentDay.minusDays(1);
+        }
+
+        return streak;
+    }
+    //
+    private boolean hasEntryOnDate(LocalDate day){
+        for(ProgressEntry entry : entries){
+            if(entry.getDate().equals(day)){
+                return true;
+            }
+        }
+        return false;
+    }
     //settery
     public void setDeleted (boolean isDeleted){this.isDeleted = isDeleted;}
 
