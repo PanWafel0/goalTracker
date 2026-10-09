@@ -20,7 +20,7 @@ public class ConsoleMenu {
         boolean running = true;
 
         while (running) {
-            int choice = choseCommonOptions();
+            int choice = chooseCommonOptions();
 
             switch (choice) {
                 case 1:
@@ -31,6 +31,9 @@ public class ConsoleMenu {
                     break;
                 case 3:
                     openTrash();
+                    break;
+                case 4:
+                    filterByCategory();
                     break;
                 case 0:
                     running = false;
@@ -63,15 +66,16 @@ public class ConsoleMenu {
     }
 
     //wypisywanie opcji do wybrania
-    private int choseCommonOptions(){
+    private int chooseCommonOptions(){
         showGoals();
         System.out.println("1: Dodaj cel");
         System.out.println("2: Wybierz cel z listy");
         System.out.println("3: Pokaż kosz");
+        System.out.println("4: Filtruj po kategorii");
         System.out.println("0: Zakończ program");
         return scanner.nextInt();
     }
-    private int choseGoalOptions(Goal goal){
+    private int chooseGoalOptions(Goal goal){
         System.out.println("1: Dodaj wpis");
         System.out.println("2: Usuń wpis");
         System.out.println("3: usuń cel");
@@ -93,6 +97,41 @@ public class ConsoleMenu {
         System.out.println("0: wróć");
         return scanner.nextInt();
     }
+    private Category showCategoriesOptions(){
+        System.out.println("Wybierz kategorię: ");
+        System.out.println("[SPORT] [EDUKACJA] [ZDROWIE] [HOBBY] [INNE]");
+        String input = scanner.next().toUpperCase();
+        Category category = null;
+        switch (input){
+            case "SPORT":
+                category = Category.SPORT;
+                break;
+            case "EDUKACJA":
+                category = Category.EDUCATION;
+                break;
+            case "ZDROWIE":
+                category = Category.HEALTH;
+                break;
+            case "HOBBY":
+                category = Category.HOBBY;
+                break;
+            case "INNE":
+                category = Category.OTHER;
+                break;
+            default:
+                System.out.println("Nie ma takiej kategorii");
+                break;
+        }
+        return category;
+    }
+
+    private void filterByCategory(){
+        Category category = showCategoriesOptions();
+        if(category == null){
+            return;
+        }
+        service.showGoalsByCategory(category);
+    }
 
     private void chooseGoal(boolean isTrash){
         System.out.println("Podaj id celu");
@@ -110,7 +149,7 @@ public class ConsoleMenu {
             System.out.println("nie ma takiego id");
             return;
         }
-        int option = choseGoalOptions(goal);
+        int option = chooseGoalOptions(goal);
         switch (option){
             case 1:
                 addEntry(goal.getId());
@@ -159,6 +198,7 @@ public class ConsoleMenu {
     private void showTrashGoals(){
         service.showGoalsInTrash();
     }
+
 
     //dodawanie, wybieranie i usuwanie celów
     private void addGoal(){

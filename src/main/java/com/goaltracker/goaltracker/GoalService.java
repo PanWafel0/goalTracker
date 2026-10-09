@@ -24,7 +24,6 @@ public class GoalService {
         return false;
     }
 
-
     public Goal findGoalById(int id){
         for(Goal goal : goals){
             if(goal.getId() == id){
@@ -32,6 +31,22 @@ public class GoalService {
             }
         }
         return null;
+    }
+    private String getPolishCategoryName(Category category){
+        switch (category){
+            case SPORT:
+                return "SPORT";
+            case EDUCATION:
+                return "EDUKACJA";
+            case HEALTH:
+                return "ZDROWIE";
+            case HOBBY:
+                return "HOBBY";
+            case OTHER:
+                return "INNE";
+            default:
+                return "NIEZNANA";
+        }
     }
     //zarzadzanie entry
     public boolean addEntryToGoal(int goalId, ProgressEntry entry){
@@ -85,9 +100,9 @@ public class GoalService {
             System.out.print(goal.getTargetValue() + " | ");
             System.out.print(goal.getCompletionPercentage() + "% | ");
             System.out.print(goal.getGoalUnit() + " | ");
-            System.out.print(goal.getStatus() + " | ");
+            System.out.print("Status[ "+goal.getStatus() + " ] | ");
         }
-        System.out.println("Streak["+goal.getStreak()+"] | ");
+        System.out.print("Streak["+goal.getStreak()+"] | ");
         System.out.print(goal.getCategory() + " | ");
         System.out.print(goal.getType() + "]");
         if (!goal.getEntries().isEmpty()) {
@@ -110,6 +125,14 @@ public class GoalService {
         System.out.println("Lista usuniętych celów: ");
         for(Goal goal : goals){
             if(goal.isDeleted()) {
+                showAllGoals(goal);
+            }
+        }
+    }
+    public void showGoalsByCategory(Category category){
+        System.out.println("Cele z kategorii: " + getPolishCategoryName(category));
+        for(Goal goal : goals){
+            if (!goal.isDeleted() && goal.getCategory()==category){
                 showAllGoals(goal);
             }
         }

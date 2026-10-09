@@ -78,7 +78,9 @@ public class Goal {
             streak++;
             currentDay = currentDay.minusDays(1);
         }
-
+        if (streak==1){
+            return 0;
+        }
         return streak;
     }
     //
