@@ -69,7 +69,7 @@ public class GoalService {
     }
     public boolean restoreGoalFromTrashById(int id){
         Goal goal = findGoalById(id);
-        if(goal != null){
+        if(goal != null && goal.isDeleted()){
             goal.setDeleted(false);
             return true;
         }
@@ -78,22 +78,24 @@ public class GoalService {
 
     //pokazywanie listy oraz listy kosza
     private void showAllGoals(Goal goal){
-            System.out.print("[" + goal.getId() + "][");
-            System.out.print(goal.getName() + " | ");
+        boolean isHabit = goal.getType() == GoalType.HABIT;
+        System.out.print("[" + goal.getId() + "][");
+        System.out.print(goal.getName() + " | ");
+        if (goal.getType()==GoalType.NUMERIC){
             System.out.print(goal.getTargetValue() + " | ");
             System.out.print(goal.getCompletionPercentage() + "% | ");
             System.out.print(goal.getGoalUnit() + " | ");
             System.out.print(goal.getStatus() + " | ");
-            System.out.print(goal.getCategory() + " | ");
-            System.out.print(goal.getType() + "]");
-            if (!goal.getEntries().isEmpty()) {
-                ProgressEntry lastEntry = goal.getLastEntry();
-                System.out.print(" Ostatni wpis: [" + lastEntry.getValue() + "]");
-            } else {
-                System.out.print(" Brak wpisów");
-            }
+        }
+        System.out.print(goal.getCategory() + " | ");
+        System.out.print(goal.getType() + "]");
+        if (!goal.getEntries().isEmpty()) {
+            ProgressEntry lastEntry = goal.getLastEntry();
+            System.out.print(" Ostatni wpis: [" + (isHabit ? (lastEntry.getDone() ? "tak" : "nie") : lastEntry.getValue()) + "]");        } else {
+            System.out.print(" Brak wpisów");
+        }
 
-            System.out.println();
+        System.out.println();
     }
     public void showList(){
         System.out.println("Lista celów: ");
@@ -111,6 +113,22 @@ public class GoalService {
             }
         }
     }
+
+    public boolean changeGoalTargetValue(int goalId, double newValue){
+        Goal goal = findGoalById(goalId);
+        if(goal == null || goal.isDeleted()){
+            return false;
+        }
+        return goal.changeTargetValue(newValue);
+    }
+    public boolean changeEntryValue(int goalId, int entryId, double newValue){
+        Goal goal = findGoalById(goalId);
+        if(goal == null || goal.isDeleted()){
+            return false;
+        }
+        return goal.changeEntryValue(entryId, newValue);
+    }
+
 
     private boolean isValid(Goal goal) {
         // US 1.1

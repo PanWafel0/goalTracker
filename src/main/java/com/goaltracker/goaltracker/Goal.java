@@ -40,14 +40,21 @@ public class Goal {
     public ProgressEntry getLastEntry(){
         return entries.getLast();
     }
+    private double getTotal(){
+        double total = 0;
+        for (ProgressEntry entry : entries){
+            total+=entry.getValue();
+        }
+        return total;
+    }
+
+    public boolean isFinished(){
+        return getStatus().equals("Zakończony");
+    }
 
     public double getCompletionPercentage(){
         if(type==GoalType.NUMERIC) {
-            double total = 0;
-            for (ProgressEntry entry : entries) {
-                total += entry.getValue();
-            }
-            double percentage = Math.floor(total/targetValue*100);
+            double percentage = Math.floor(getTotal()/targetValue*100);
             if(percentage>100){
                 return 100.0;
             }
@@ -58,6 +65,10 @@ public class Goal {
     //settery
     public void setDeleted (boolean isDeleted){this.isDeleted = isDeleted;}
 
+    public void setId(int id) {
+        this.id =id;
+    }
+
     private void checkStatus(){
         if(getCompletionPercentage()<100){
             status = "W trakcie";
@@ -66,13 +77,10 @@ public class Goal {
             status = "Zakończony";
         }
     }
-
-
     public boolean isDeleted(){return isDeleted;}
-
     //zarządzanie wpisami postępu
     public boolean addEntry(ProgressEntry entry){
-        if(entry.getValue()<=0){
+        if(entry.getValue()<=0 && type == GoalType.NUMERIC){
             System.out.println("Nie można dodac wpisu z wartością nie wiekszą niż 0");
             return false;
         }
@@ -105,10 +113,27 @@ public class Goal {
         return false;
     }
 
-    public void setId(int id) {
-        this.id =id;
+    public boolean changeEntryValue(int entryId, double newValue){
+        int i=0;
+        if (newValue<=0){
+            return false;
+        }
+        while(i<entries.size()){
+            if (entries.get(i).getId() == entryId) {
+                entries.get(i).setValue(newValue);
+                checkStatus();
+                return true;
+            }
+            i++;
+        }
+        return false;
     }
-    public boolean isFinished(){
-        return getStatus().equals("Zakończony");
+    public boolean changeTargetValue(double newValue){
+        if(!isFinished() || newValue <= 0){
+            return false;
+        }
+        this.targetValue = newValue;
+        checkStatus();
+        return true;
     }
 }
