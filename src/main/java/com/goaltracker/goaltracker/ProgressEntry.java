@@ -18,6 +18,8 @@ public class ProgressEntry {
         this.date = date;
         this.done = done;
     }
+    public ProgressEntry(){
+    }
     //gettery
     public int getId(){
         return id;
@@ -41,6 +43,9 @@ public class ProgressEntry {
     }
     public void setId(int id) {
         this.id =id;
+    }
+    public void setDone(boolean newDone){
+        done = newDone;
     }
 }
 

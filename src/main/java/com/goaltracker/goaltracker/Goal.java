@@ -1,5 +1,7 @@
 package com.goaltracker.goaltracker;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,10 @@ public class Goal {
         this.entries = new ArrayList<>();
         this.status = "W trakcie";
     }
+
+    public Goal(){
+        entries = new ArrayList<>();
+    }
     //gettery
     public List<ProgressEntry> getEntries(){ return entries;}
     public int getId() {return id;}
@@ -37,7 +43,11 @@ public class Goal {
     public Category getCategory(){return category;}
     public String getStatus(){return status;}
     public int  getCurrentEntryId(){return currentEntryId;}
-    public ProgressEntry getLastEntry(){
+    @JsonIgnore
+    public ProgressEntry getLastEntry() {
+        if (entries.isEmpty()) {
+            return null;
+        }
         return entries.getLast();
     }
     private double getTotal(){
@@ -52,6 +62,7 @@ public class Goal {
         return getStatus().equals("Zakończony");
     }
 
+    @JsonIgnore
     public double getCompletionPercentage(){
         if(type==GoalType.NUMERIC) {
             double percentage = Math.floor(getTotal()/targetValue*100);
@@ -94,10 +105,19 @@ public class Goal {
     }
     //settery
     public void setDeleted (boolean isDeleted){this.isDeleted = isDeleted;}
+    public void setName (String name){this.name = name;}
+    public void setType (GoalType type){this.type = type;}
+    public void setGoalUnit(String goalUnit){this.goalUnit = goalUnit;}
+    public void setTargetValue(double targetValue){this.targetValue = targetValue;}
+    public void setCategory (Category category){this.category = category;}
+    public void setStatus (String status){this.status = status;}
+    public void setEntries (List<ProgressEntry> entries){this.entries = entries;}
+    public void setCurrentEntryId(int currentEntryId){this.currentEntryId = currentEntryId;}
 
     public void setId(int id) {
         this.id =id;
     }
+
 
     private void checkStatus(){
         if(getCompletionPercentage()<100){
