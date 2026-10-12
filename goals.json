@@ -1,0 +1,37 @@
+[ {
+  "id" : 1,
+  "name" : "bieg",
+  "type" : "NUMERIC",
+  "goalUnit" : "km",
+  "targetValue" : 10.0,
+  "category" : "SPORT",
+  "status" : "W trakcie",
+  "entries" : [ {
+    "id" : 1,
+    "value" : 5.0,
+    "date" : [ 2020, 1, 1 ],
+    "done" : false
+  } ],
+  "currentEntryId" : 2,
+  "streak" : 0,
+  "deleted" : false,
+  "finished" : false
+}, {
+  "id" : 2,
+  "name" : "BIEGANIE",
+  "type" : "NUMERIC",
+  "goalUnit" : "KM",
+  "targetValue" : 10.0,
+  "category" : "SPORT",
+  "status" : "W trakcie",
+  "entries" : [ {
+    "id" : 1,
+    "value" : 1.0,
+    "date" : [ 2020, 1, 1 ],
+    "done" : false
+  } ],
+  "currentEntryId" : 2,
+  "streak" : 0,
+  "deleted" : false,
+  "finished" : false
+} ]
