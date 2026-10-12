@@ -1,20 +1,24 @@
 package com.goaltracker.goaltracker;
 
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GoaltrackerApplication {
+public class GoaltrackerApplication implements CommandLineRunner {
 
+	private final ConsoleMenu consoleMenu;
 
-		public static void main(String[] args) {
-			GoalService service = new GoalService();
-			ConsoleMenu menu = new ConsoleMenu(service);
+	public GoaltrackerApplication(ConsoleMenu consoleMenu) {
+		this.consoleMenu = consoleMenu;
+	}
 
-			menu.run();
+	public static void main(String[] args) {
+		SpringApplication.run(GoaltrackerApplication.class, args);
+	}
 
+	@Override
+	public void run(String... args) throws Exception {
+		consoleMenu.run();
 	}
 }
-
-
-
-
