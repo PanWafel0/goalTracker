@@ -1,11 +1,9 @@
 package com.goaltracker.goaltracker;
 
-import org.springframework.stereotype.Component;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
-@Component
+
 public class ConsoleMenu {
     private final GoalService service;
     private final Scanner scanner = new Scanner(System.in);

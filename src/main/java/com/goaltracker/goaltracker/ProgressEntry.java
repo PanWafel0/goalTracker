@@ -1,23 +1,12 @@
 package com.goaltracker.goaltracker;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "progress_entry")
 public class ProgressEntry {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private double value;
     private LocalDate date;
     private boolean done;
-    @ManyToOne
-    @JoinColumn(name = "goal_id")
-    @JsonIgnore
-    private Goal goal;
 
     public ProgressEntry( double value, LocalDate date){
         this.value = value;
