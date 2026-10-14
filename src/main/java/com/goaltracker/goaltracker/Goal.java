@@ -1,41 +1,22 @@
 package com.goaltracker.goaltracker;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "goal")
 public class Goal {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Column(nullable = false)
     private String name;
-
-    @Enumerated(EnumType.STRING)
     private GoalType type;
-
     private String goalUnit;
-
     private double targetValue;
-
-    @Enumerated(EnumType.STRING)
     private Category category;
-
     private String status;
-
     private boolean isDeleted;
-
-    @OneToMany(mappedBy = "goal", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProgressEntry> entries = new ArrayList<>();
-
-    private int currentEntryId = 1;
+    private List<ProgressEntry> entries;
+    private int currentEntryId=1;
 
 
     public Goal(String name, GoalType type,String goalUnit, double targetValue, Category category){
