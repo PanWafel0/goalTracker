@@ -1,52 +1,31 @@
 package com.goaltracker.goaltracker;
 
+import org.springframework.stereotype.Service;
 import java.util.List;
 
+@Service
 public class GoalService {
-    private final List<Goal> goals;
-    private int currentId = 1;
-    private final GoalStorage storage = new GoalStorage();
 
-    public GoalService() {
-        this.goals = storage.loadGoals();
-        recalculateIdCounter();
-    }
+    private final GoalRepository goalRepository;
 
-    private void recalculateIdCounter() {
-        int maxId = 0;
-        for (Goal goal : goals) {
-            if (goal.getId() > maxId) {
-                maxId = goal.getId();
-            }
-        }
-        currentId = maxId + 1;
+    public GoalService(GoalRepository goalRepository) {
+        this.goalRepository = goalRepository;
     }
 
     public List<Goal> getGoals() {
-        return goals;
-    }
-
-    private void persist() {
-        storage.saveGoals(goals);
+        return goalRepository.findAll();
     }
 
     public boolean addGoal(Goal goal) {
         if (isValid(goal)) {
-            goals.add(goal);
-            goal.setId(currentId++);
-            persist();
+            goalRepository.save(goal);
             return true;
         }
         return false;
     }
 
     public Goal findGoalById(int id) {
-        for (Goal goal : goals) {
-            if (goal.getId() == id) {
-                return goal;
-            }
-        }
-        return null;
+        return goalRepository.findById(id).orElse(null);
     }
 
     private String getPolishCategoryName(Category category) {
@@ -66,16 +45,18 @@ public class GoalService {
         }
     }
 
-    //zarzadzanie entry
     public boolean addEntryToGoal(int goalId, ProgressEntry entry) {
         Goal goal = findGoalById(goalId);
 
         if (goal == null) {
             return false;
         }
+
+        entry.setGoal(goal);
+
         boolean result = goal.addEntry(entry);
         if (result) {
-            persist();
+            goalRepository.save(goal);
         }
         return result;
     }
@@ -87,17 +68,17 @@ public class GoalService {
         }
         boolean result = goal.deleteEntryById(entryId);
         if (result) {
-            persist();
+            goalRepository.save(goal);
         }
         return result;
     }
 
-    //usuwanie i przywracanie celów
+
     public boolean moveGoalToTrashById(int id) {
         Goal goal = findGoalById(id);
         if (goal != null) {
             goal.setDeleted(true);
-            persist();
+            goalRepository.save(goal);
             return true;
         }
         return false;
@@ -106,8 +87,7 @@ public class GoalService {
     public boolean deleteGoalPermanentlyById(int goalId) {
         Goal goal = findGoalById(goalId);
         if (goal != null && goal.isDeleted()) {
-            goals.remove(goal);
-            persist();
+            goalRepository.delete(goal);
             return true;
         }
         return false;
@@ -117,13 +97,13 @@ public class GoalService {
         Goal goal = findGoalById(id);
         if (goal != null && goal.isDeleted()) {
             goal.setDeleted(false);
-            persist();
+            goalRepository.save(goal);
             return true;
         }
         return false;
     }
 
-    //pokazywanie listy oraz listy kosza
+
     private void showAllGoals(Goal goal) {
         boolean isHabit = goal.getType() == GoalType.HABIT;
         System.out.print("[" + goal.getId() + "][");
@@ -149,7 +129,7 @@ public class GoalService {
 
     public void showList() {
         System.out.println("Lista celów: ");
-        for (Goal goal : goals) {
+        for (Goal goal : getGoals()) {
             if (!goal.isDeleted()) {
                 showAllGoals(goal);
             }
@@ -158,7 +138,7 @@ public class GoalService {
 
     public void showGoalsInTrash() {
         System.out.println("Lista usuniętych celów: ");
-        for (Goal goal : goals) {
+        for (Goal goal : getGoals()) {
             if (goal.isDeleted()) {
                 showAllGoals(goal);
             }
@@ -167,7 +147,7 @@ public class GoalService {
 
     public void showGoalsByCategory(Category category) {
         System.out.println("Cele z kategorii: " + getPolishCategoryName(category));
-        for (Goal goal : goals) {
+        for (Goal goal : getGoals()) {
             if (!goal.isDeleted() && goal.getCategory() == category) {
                 showAllGoals(goal);
             }
@@ -181,7 +161,7 @@ public class GoalService {
         }
         boolean result = goal.changeTargetValue(newValue);
         if (result) {
-            persist();
+            goalRepository.save(goal);
         }
         return result;
     }
@@ -193,18 +173,16 @@ public class GoalService {
         }
         boolean result = goal.changeEntryValue(entryId, newValue);
         if (result) {
-            persist();
+            goalRepository.save(goal);
         }
         return result;
     }
 
     private boolean isValid(Goal goal) {
-        // US 1.1
         if (goal.getName() == null || goal.getName().isBlank()) {
             return false;
         }
 
-        // US 1.2
         if (goal.getType() == null) {
             return false;
         }
@@ -217,12 +195,10 @@ public class GoalService {
             }
         }
 
-        // US 1.3
         if (goal.getType() == GoalType.NUMERIC && goal.getTargetValue() <= 0) {
             return false;
         }
 
-        // US 1.4
         if (goal.getCategory() == null) {
             return false;
         }
