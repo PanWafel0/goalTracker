@@ -32,11 +32,8 @@ public class Goal {
 
     private boolean isDeleted;
 
-    @OneToMany(mappedBy = "goal", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "goal", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<ProgressEntry> entries = new ArrayList<>();
-
-    private int currentEntryId = 1;
-
 
     public Goal(String name, GoalType type,String goalUnit, double targetValue, Category category){
         this.name = name;
@@ -61,7 +58,7 @@ public class Goal {
     public double getTargetValue(){return targetValue;}
     public Category getCategory(){return category;}
     public String getStatus(){return status;}
-    public int  getCurrentEntryId(){return currentEntryId;}
+
     @JsonIgnore
     public ProgressEntry getLastEntry() {
         if (entries.isEmpty()) {
@@ -131,7 +128,6 @@ public class Goal {
     public void setCategory (Category category){this.category = category;}
     public void setStatus (String status){this.status = status;}
     public void setEntries (List<ProgressEntry> entries){this.entries = entries;}
-    public void setCurrentEntryId(int currentEntryId){this.currentEntryId = currentEntryId;}
 
     public void setId(int id) {
         this.id =id;
@@ -147,6 +143,7 @@ public class Goal {
         }
     }
     public boolean isDeleted(){return isDeleted;}
+
     //zarządzanie wpisami postępu
     public boolean addEntry(ProgressEntry entry){
         if(entry.getValue()<=0 && type == GoalType.NUMERIC){
@@ -159,7 +156,7 @@ public class Goal {
         }
         if("W trakcie".equals(status)){
             entries.add(entry);
-            entry.setId(currentEntryId++);
+            // USUNIĘTO INKREMENTACJĘ currentEntryId
             checkStatus();
             return true;
         }
@@ -169,6 +166,7 @@ public class Goal {
             return false;
         }
     }
+
     public boolean deleteEntryById(int entryId){
         int i =0;
         while(i< entries.size()){

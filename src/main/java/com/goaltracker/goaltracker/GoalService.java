@@ -1,9 +1,12 @@
 package com.goaltracker.goaltracker;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
+@Transactional
 public class GoalService {
 
     private final GoalRepository goalRepository;
@@ -129,28 +132,22 @@ public class GoalService {
 
     public void showList() {
         System.out.println("Lista celów: ");
-        for (Goal goal : getGoals()) {
-            if (!goal.isDeleted()) {
-                showAllGoals(goal);
-            }
+        for (Goal goal : goalRepository.findByIsDeletedFalse()) {
+            showAllGoals(goal);
         }
     }
 
     public void showGoalsInTrash() {
         System.out.println("Lista usuniętych celów: ");
-        for (Goal goal : getGoals()) {
-            if (goal.isDeleted()) {
-                showAllGoals(goal);
-            }
+        for (Goal goal : goalRepository.findByIsDeletedTrue()) {
+            showAllGoals(goal);
         }
     }
 
     public void showGoalsByCategory(Category category) {
         System.out.println("Cele z kategorii: " + getPolishCategoryName(category));
-        for (Goal goal : getGoals()) {
-            if (!goal.isDeleted() && goal.getCategory() == category) {
-                showAllGoals(goal);
-            }
+        for (Goal goal : goalRepository.findByCategoryAndIsDeletedFalse(category)) {
+            showAllGoals(goal);
         }
     }
 

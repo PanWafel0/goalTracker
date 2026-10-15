@@ -11,7 +11,10 @@ public class ProgressEntry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "entry_value")
     private double value;
+
     private LocalDate date;
     private boolean done;
 
