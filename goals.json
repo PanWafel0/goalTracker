@@ -14,7 +14,7 @@
   } ],
   "currentEntryId" : 2,
   "streak" : 0,
-  "deleted" : false,
+  "deleted" : true,
   "finished" : false
 }, {
   "id" : 2,
@@ -32,6 +32,6 @@
   } ],
   "currentEntryId" : 2,
   "streak" : 0,
-  "deleted" : false,
+  "deleted" : true,
   "finished" : false
 } ]
