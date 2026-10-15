@@ -45,6 +45,7 @@ public class ConsoleMenu {
                     break;
             }
         }
+        System.exit(0);
     }
 
     private void trashRun() {
@@ -256,8 +257,6 @@ public class ConsoleMenu {
 
             if(answer.equalsIgnoreCase("tak")){
                 done = true;
-            } else if (answer.equalsIgnoreCase("nie")) {
-                done= false;
             } else{
                 System.out.println("Odpowiedź musi być tak lub nie");
                 return;

@@ -3,8 +3,6 @@ package com.goaltracker.goaltracker;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @Transactional
 public class GoalService {
@@ -15,16 +13,12 @@ public class GoalService {
         this.goalRepository = goalRepository;
     }
 
-    public List<Goal> getGoals() {
-        return goalRepository.findAll();
-    }
 
-    public boolean addGoal(Goal goal) {
+
+    public void addGoal(Goal goal) {
         if (isValid(goal)) {
             goalRepository.save(goal);
-            return true;
         }
-        return false;
     }
 
     public Goal findGoalById(int id) {
@@ -32,20 +26,13 @@ public class GoalService {
     }
 
     private String getPolishCategoryName(Category category) {
-        switch (category) {
-            case SPORT:
-                return "SPORT";
-            case EDUCATION:
-                return "EDUKACJA";
-            case HEALTH:
-                return "ZDROWIE";
-            case HOBBY:
-                return "HOBBY";
-            case OTHER:
-                return "INNE";
-            default:
-                return "NIEZNANA";
-        }
+        return switch (category) {
+            case SPORT -> "SPORT";
+            case EDUCATION -> "EDUKACJA";
+            case HEALTH -> "ZDROWIE";
+            case HOBBY -> "HOBBY";
+            case OTHER -> "INNE";
+        };
     }
 
     public boolean addEntryToGoal(int goalId, ProgressEntry entry) {
@@ -163,17 +150,6 @@ public class GoalService {
         return result;
     }
 
-    public boolean changeEntryValue(int goalId, int entryId, double newValue) {
-        Goal goal = findGoalById(goalId);
-        if (goal == null || goal.isDeleted()) {
-            return false;
-        }
-        boolean result = goal.changeEntryValue(entryId, newValue);
-        if (result) {
-            goalRepository.save(goal);
-        }
-        return result;
-    }
 
     private boolean isValid(Goal goal) {
         if (goal.getName() == null || goal.getName().isBlank()) {

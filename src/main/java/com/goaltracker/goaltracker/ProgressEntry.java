@@ -54,19 +54,8 @@ public class ProgressEntry {
         return goal;
     }
 
+
     //settery
-    public void setValue(double newValue) {
-        value = newValue;
-    }
-    public void setDate(LocalDate newDate) {
-        date = newDate;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
-    public void setDone(boolean newDone) {
-        done = newDone;
-    }
     public void setGoal(Goal goal) {
         this.goal = goal;
     }

@@ -33,7 +33,7 @@ public class Goal {
     private boolean isDeleted;
 
     @OneToMany(mappedBy = "goal", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<ProgressEntry> entries = new ArrayList<>();
+    private final List<ProgressEntry> entries = new ArrayList<>();
 
     public Goal(String name, GoalType type,String goalUnit, double targetValue, Category category){
         this.name = name;
@@ -42,12 +42,11 @@ public class Goal {
         this.targetValue = targetValue;
         this.category = category;
         this.isDeleted = false;
-        this.entries = new ArrayList<>();
         this.status = "W trakcie";
     }
 
     public Goal(){
-        entries = new ArrayList<>();
+
     }
     //gettery
     public List<ProgressEntry> getEntries(){ return entries;}
@@ -122,16 +121,8 @@ public class Goal {
     //settery
     public void setDeleted (boolean isDeleted){this.isDeleted = isDeleted;}
     public void setName (String name){this.name = name;}
-    public void setType (GoalType type){this.type = type;}
-    public void setGoalUnit(String goalUnit){this.goalUnit = goalUnit;}
-    public void setTargetValue(double targetValue){this.targetValue = targetValue;}
-    public void setCategory (Category category){this.category = category;}
-    public void setStatus (String status){this.status = status;}
-    public void setEntries (List<ProgressEntry> entries){this.entries = entries;}
 
-    public void setId(int id) {
-        this.id =id;
-    }
+
 
 
     private void checkStatus(){
@@ -180,21 +171,6 @@ public class Goal {
         return false;
     }
 
-    public boolean changeEntryValue(int entryId, double newValue){
-        int i=0;
-        if (newValue<=0){
-            return false;
-        }
-        while(i<entries.size()){
-            if (entries.get(i).getId() == entryId) {
-                entries.get(i).setValue(newValue);
-                checkStatus();
-                return true;
-            }
-            i++;
-        }
-        return false;
-    }
     public boolean changeTargetValue(double newValue){
         if(!isFinished() || newValue <= 0){
             return false;
