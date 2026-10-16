@@ -45,7 +45,7 @@ public class ConsoleMenu {
                     break;
             }
         }
-        System.exit(0);
+        //System.exit(0);
     }
 
     private void trashRun() {
