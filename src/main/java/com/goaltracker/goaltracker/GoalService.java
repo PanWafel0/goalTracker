@@ -3,6 +3,8 @@ package com.goaltracker.goaltracker;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class GoalService {
@@ -184,5 +186,13 @@ public class GoalService {
                 return false;
             }
         }
+    }
+
+    public List<Goal> getGoals() {
+        return goalRepository.findAll();
+    }
+
+    public List<Goal> getGoalsInTrash() {
+        return goalRepository.findByIsDeletedTrue();
     }
 }

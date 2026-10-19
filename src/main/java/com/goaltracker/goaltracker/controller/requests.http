@@ -1,0 +1,14 @@
+### Dodaj nowy cel
+POST http://localhost:8080/api/goals
+Content-Type: application/json
+
+{
+  "name": "bieganie",
+  "type": "NUMERIC",
+  "goalUnit": "km",
+  "targetValue": 10,
+  "category": "SPORT"
+}
+
+### Pokaż wszystkie cele
+GET http://localhost:8080/api/goals
