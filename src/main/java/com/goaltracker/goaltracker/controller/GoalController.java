@@ -2,11 +2,11 @@ package com.goaltracker.goaltracker.controller;
 
 import com.goaltracker.goaltracker.Goal;
 import com.goaltracker.goaltracker.GoalService;
-import com.goaltracker.goaltracker.dto.GoalMapper;
-import com.goaltracker.goaltracker.dto.GoalRequestDto;
-import com.goaltracker.goaltracker.dto.GoalResponseDto;
+import com.goaltracker.goaltracker.ProgressEntry;
+import com.goaltracker.goaltracker.dto.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,9 +21,14 @@ public class GoalController {
 
     @GetMapping
     public List<GoalResponseDto> getAllGoals() {
-        return goalService.getGoals().stream()
-                .map(GoalMapper::toDto)
-                .toList();
+        List<Goal> goals = goalService.getGoals();
+        List<GoalResponseDto> result = new ArrayList<>();
+
+        for (Goal goal : goals) {
+            GoalResponseDto dto = GoalMapper.toDto(goal);
+            result.add(dto);
+        }
+        return result;
     }
 
     @PostMapping
@@ -32,22 +37,68 @@ public class GoalController {
         goalService.addGoal(goal);
         return GoalMapper.toDto(goal);
     }
+
     @GetMapping("/trash")
     public List<GoalResponseDto> getGoalsInTrash() {
-        return goalService.getGoalsInTrash().stream()
-                .map(GoalMapper::toDto)
-                .toList();
+        List<Goal> goals = goalService.getGoalsInTrash();
+        List<GoalResponseDto> result = new ArrayList<>();
+
+        for (Goal goal : goals) {
+            GoalResponseDto dto = GoalMapper.toDto(goal);
+            result.add(dto);
+        }
+        return result;
     }
 
     @DeleteMapping("/{id}")
     public String moveGoalToTrash(@PathVariable int id) {
         boolean result = goalService.moveGoalToTrashById(id);
-        return result ? "Cel przeniesiony do kosza" : "Nie znaleziono celu";
+
+        if (result) {
+            return "Cel przeniesiony do kosza";
+        } else {
+            return "Nie znaleziono celu";
+        }
     }
 
     @PutMapping("/{id}/restore")
     public String restoreGoal(@PathVariable int id) {
         boolean result = goalService.restoreGoalFromTrashById(id);
-        return result ? "Cel przywrócony" : "Nie znaleziono celu w koszu";
+
+        if (result) {
+            return "Cel przywrócony";
+        } else {
+            return "Nie znaleziono celu w koszu";
+        }
+    }
+
+    @PostMapping("/{id}/entries")
+    public String addEntry(@PathVariable int id, @RequestBody EntryRequestDto dto) {
+        ProgressEntry entry = GoalMapper.toEntryEntity(dto);
+        boolean result = goalService.addEntryToGoal(id, entry);
+
+        if (result) {
+            return "Wpis dodany";
+        } else {
+            return "Nie udało się dodać wpisu";
+        }
+    }
+
+    @GetMapping("/{id}/entries")
+    public List<EntryResponseDto> getEntries(@PathVariable int id) {
+        Goal goal = goalService.findGoalById(id);
+
+        if (goal == null) {
+            return new ArrayList<>();
+        }
+
+        List<ProgressEntry> entries = goal.getEntries();
+        List<EntryResponseDto> result = new ArrayList<>();
+
+        for (ProgressEntry entry : entries) {
+            EntryResponseDto dto = GoalMapper.toEntryDto(entry);
+            result.add(dto);
+        }
+        return result;
     }
 }
