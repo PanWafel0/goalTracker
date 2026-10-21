@@ -4,11 +4,14 @@ import com.goaltracker.goaltracker.Goal;
 import com.goaltracker.goaltracker.GoalService;
 import com.goaltracker.goaltracker.ProgressEntry;
 import com.goaltracker.goaltracker.dto.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Tag(name = "Goals", description = "Zarządzanie celami i wpisami postępu")
 @RestController
 @RequestMapping("/api/goals")
 public class GoalController {
@@ -19,6 +22,7 @@ public class GoalController {
         this.goalService = goalService;
     }
 
+    @Operation(summary = "Pobierz listę aktywnych celów")
     @GetMapping
     public List<GoalResponseDto> getAllGoals() {
         List<Goal> goals = goalService.getGoals();
@@ -31,6 +35,7 @@ public class GoalController {
         return result;
     }
 
+    @Operation(summary = "Dodaj nowy cel")
     @PostMapping
     public GoalResponseDto addGoal(@RequestBody GoalRequestDto dto) {
         Goal goal = GoalMapper.toEntity(dto);
@@ -38,6 +43,7 @@ public class GoalController {
         return GoalMapper.toDto(goal);
     }
 
+    @Operation(summary = "Pobierz listę celów z kosza")
     @GetMapping("/trash")
     public List<GoalResponseDto> getGoalsInTrash() {
         List<Goal> goals = goalService.getGoalsInTrash();
@@ -50,6 +56,7 @@ public class GoalController {
         return result;
     }
 
+    @Operation(summary = "Przenieś cel do kosza")
     @DeleteMapping("/{id}")
     public String moveGoalToTrash(@PathVariable int id) {
         boolean result = goalService.moveGoalToTrashById(id);
@@ -61,6 +68,7 @@ public class GoalController {
         }
     }
 
+    @Operation(summary = "Przywróć cel z kosza")
     @PutMapping("/{id}/restore")
     public String restoreGoal(@PathVariable int id) {
         boolean result = goalService.restoreGoalFromTrashById(id);
@@ -72,6 +80,7 @@ public class GoalController {
         }
     }
 
+    @Operation(summary = "Dodaj wpis postępu do celu")
     @PostMapping("/{id}/entries")
     public String addEntry(@PathVariable int id, @RequestBody EntryRequestDto dto) {
         ProgressEntry entry = GoalMapper.toEntryEntity(dto);
@@ -84,6 +93,7 @@ public class GoalController {
         }
     }
 
+    @Operation(summary = "Pobierz listę wpisów celu")
     @GetMapping("/{id}/entries")
     public List<EntryResponseDto> getEntries(@PathVariable int id) {
         Goal goal = goalService.findGoalById(id);

@@ -9,8 +9,6 @@ import java.util.List;
 public interface GoalRepository extends JpaRepository<Goal, Integer> {
 
     List<Goal> findByIsDeletedFalse();
-
     List<Goal> findByIsDeletedTrue();
-
     List<Goal> findByCategoryAndIsDeletedFalse(Category category);
 }
