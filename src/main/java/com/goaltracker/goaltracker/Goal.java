@@ -122,9 +122,6 @@ public class Goal {
     public void setDeleted (boolean isDeleted){this.isDeleted = isDeleted;}
     public void setName (String name){this.name = name;}
 
-
-
-
     private void checkStatus(){
         if(getCompletionPercentage()<100){
             status = "W trakcie";
